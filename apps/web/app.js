@@ -4,26 +4,25 @@ let currentUser = null;
 let currentPage = null;
 let mobileNavOpen = false;
 
-
 /* ============================================================
    DOM HELPERS
-   ============================================================ */
+============================================================ */
 
 const $ = (selector) => document.querySelector(selector);
-
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-
 
 /* ============================================================
    API HELPER
-   ============================================================ */
+============================================================ */
 
 async function apiRequest(path, options = {}) {
     const config = {
         method: options.method || "GET",
         credentials: "include",
         headers: {
-            ...(options.body ? { "Content-Type": "application/json" } : {}),
+            ...(options.body
+                ? { "Content-Type": "application/json" }
+                : {}),
             ...(options.headers || {})
         }
     };
@@ -50,7 +49,8 @@ async function apiRequest(path, options = {}) {
 
     if (!response.ok) {
         const error = new Error(
-            data?.error || `Request failed with status ${response.status}.`
+            data?.error ||
+            `Request failed with status ${response.status}.`
         );
 
         error.status = response.status;
@@ -62,10 +62,9 @@ async function apiRequest(path, options = {}) {
     return data;
 }
 
-
 /* ============================================================
    TOAST
-   ============================================================ */
+============================================================ */
 
 let toastTimer = null;
 
@@ -87,10 +86,9 @@ function showToast(message, type = "success") {
     }, 3500);
 }
 
-
 /* ============================================================
    LOADING
-   ============================================================ */
+============================================================ */
 
 function setLoading(isLoading, text = "Loading...") {
     const overlay = $("#loadingOverlay");
@@ -108,10 +106,9 @@ function setLoading(isLoading, text = "Loading...") {
     overlay.hidden = !isLoading;
 }
 
-
 /* ============================================================
    FORM MESSAGES
-   ============================================================ */
+============================================================ */
 
 function showFormMessage(id, message, type = "error") {
     const element = $(`#${id}`);
@@ -137,10 +134,9 @@ function clearFormMessage(id) {
     element.hidden = true;
 }
 
-
 /* ============================================================
    ROUTING
-   ============================================================ */
+============================================================ */
 
 const publicRoutes = [
     "home",
@@ -164,11 +160,54 @@ function normalizeRoute(route) {
         return "home";
     }
 
-    return route.replace(/^#/, "").trim().toLowerCase();
+    return route
+        .replace(/^#/, "")
+        .split("?")[0]
+        .trim()
+        .toLowerCase();
 }
 
+/*
+ * Referral links use:
+ *
+ * #register?ref=PROMOCODE
+ *
+ * The route must only use "register".
+ */
+
 function getRouteFromHash() {
-    return normalizeRoute(window.location.hash);
+    const rawHash = window.location.hash || "";
+    const hashWithoutPound = rawHash.replace(/^#/, "");
+    const queryIndex = hashWithoutPound.indexOf("?");
+
+    const route =
+        queryIndex === -1
+            ? hashWithoutPound
+            : hashWithoutPound.slice(0, queryIndex);
+
+    return normalizeRoute(route);
+}
+
+/*
+ * Reads the promoter referral code from:
+ *
+ * #register?ref=PROMOCODE
+ */
+
+function getReferralCodeFromHash() {
+    const rawHash = window.location.hash || "";
+    const queryIndex = rawHash.indexOf("?");
+
+    if (queryIndex === -1) {
+        return "";
+    }
+
+    const query = rawHash.slice(queryIndex + 1);
+    const params = new URLSearchParams(query);
+
+    return (params.get("ref") || "")
+        .trim()
+        .toUpperCase();
 }
 
 function setRoute(route) {
@@ -203,7 +242,10 @@ function closeMobileNav() {
     }
 
     if (button) {
-        button.setAttribute("aria-expanded", "false");
+        button.setAttribute(
+            "aria-expanded",
+            "false"
+        );
     }
 }
 
@@ -217,7 +259,10 @@ function toggleMobileNav() {
 
     mobileNavOpen = !mobileNavOpen;
 
-    nav.classList.toggle("open", mobileNavOpen);
+    nav.classList.toggle(
+        "open",
+        mobileNavOpen
+    );
 
     if (button) {
         button.setAttribute(
@@ -227,10 +272,9 @@ function toggleMobileNav() {
     }
 }
 
-
 /* ============================================================
    PAGE VISIBILITY
-   ============================================================ */
+============================================================ */
 
 function hideAllPages() {
     $$(".page-section").forEach((section) => {
@@ -251,10 +295,9 @@ function showPage(pageName) {
     return true;
 }
 
-
 /* ============================================================
    AUTH STATE
-   ============================================================ */
+============================================================ */
 
 async function loadCurrentUser() {
     try {
@@ -267,29 +310,45 @@ async function loadCurrentUser() {
             data.user
         ) {
             currentUser = data;
+
+            if (!Array.isArray(currentUser.user.roles)) {
+                currentUser.user.roles = [];
+            }
+
             return data;
         }
 
         currentUser = null;
-        return null;
 
+        return null;
     } catch (error) {
+        console.error(
+            "Unable to load current user:",
+            error
+        );
+
         currentUser = null;
+
         return null;
     }
 }
 
-
 /* ============================================================
    ROLE HELPERS
-   ============================================================ */
+============================================================ */
 
-function userHasRole(role) {
-    if (!currentUser?.user?.roles) {
-        return false;
+function getUserRoles() {
+    if (!currentUser?.user) {
+        return [];
     }
 
-    return currentUser.user.roles.includes(role);
+    return Array.isArray(currentUser.user.roles)
+        ? currentUser.user.roles
+        : [];
+}
+
+function userHasRole(role) {
+    return getUserRoles().includes(role);
 }
 
 function userIsAdmin() {
@@ -297,25 +356,53 @@ function userIsAdmin() {
 }
 
 function userIsPromoter() {
-    return userHasRole("promoter");
+    /*
+     * A valid promoter account normally has the promoter role.
+     * The promoter profile fallback keeps older dual-role accounts
+     * usable if their profile exists but the role list is stale.
+     */
+    return (
+        userHasRole("promoter") ||
+        Boolean(currentUser?.promoterProfile)
+    );
 }
 
+function userIsPlayer() {
+    return (
+        userHasRole("player") ||
+        Boolean(currentUser?.playerProfile)
+    );
+}
+
+/*
+ * Dual-role accounts:
+ *
+ * Admin -> Admin Dashboard
+ * Promoter -> Promoter Dashboard
+ * Player -> Player Dashboard
+ */
+
 function getDefaultDashboard() {
-    if (userIsAdmin()) {
+    const roles = getUserRoles();
+
+    if (roles.includes("admin")) {
         return "admin-dashboard";
     }
 
-    if (userIsPromoter()) {
+    if (roles.includes("promoter")) {
+        return "promoter-dashboard";
+    }
+
+    if (roles.includes("player")) {
         return "player-dashboard";
     }
 
     return "player-dashboard";
 }
 
-
 /* ============================================================
    ROUTE AUTHORIZATION
-   ============================================================ */
+============================================================ */
 
 function canAccessRoute(route) {
     if (route === "admin-dashboard") {
@@ -327,23 +414,25 @@ function canAccessRoute(route) {
     }
 
     if (route === "player-dashboard") {
-        return Boolean(currentUser);
+        return userIsPlayer();
     }
 
     return true;
 }
 
-
 /* ============================================================
    HEADER STATE
-   ============================================================ */
+============================================================ */
 
 function updateHeader() {
     const loginButton = $("#loginNavButton");
     const registerButton = $("#registerNavButton");
 
-    const mobileLoginButton = $("#mobileLoginButton");
-    const mobileRegisterButton = $("#mobileRegisterButton");
+    const mobileLoginButton =
+        $("#mobileLoginButton");
+
+    const mobileRegisterButton =
+        $("#mobileRegisterButton");
 
     if (currentUser) {
         if (loginButton) {
@@ -361,7 +450,6 @@ function updateHeader() {
         if (mobileRegisterButton) {
             mobileRegisterButton.textContent = "Sign Out";
         }
-
     } else {
         if (loginButton) {
             loginButton.textContent = "Sign In";
@@ -381,16 +469,68 @@ function updateHeader() {
     }
 }
 
+/* ============================================================
+   DASHBOARD MODE BUTTONS
+============================================================ */
+
+/*
+ * Player dashboard:
+ * If the user is also a promoter, show "Promoter Mode".
+ *
+ * Promoter dashboard:
+ * If the user is also a player, show "Player Mode".
+ */
+
+function updateModeButtons() {
+    const playerModeButton =
+        $("#playerModeButton");
+
+    const promoterPlayerModeButton =
+        $("#promoterPlayerModeButton");
+
+    const showButton = (button, label, visible) => {
+        if (!button) {
+            return;
+        }
+
+        button.textContent = label;
+        button.hidden = !visible;
+
+        /*
+         * Remove a possible inline display:none from the HTML.
+         * The hidden property alone cannot override that.
+         */
+        if (visible) {
+            button.style.removeProperty("display");
+        } else {
+            button.style.display = "none";
+        }
+    };
+
+    showButton(
+        playerModeButton,
+        "Promoter Mode",
+        Boolean(currentUser) && userIsPromoter()
+    );
+
+    showButton(
+        promoterPlayerModeButton,
+        "Player Mode",
+        Boolean(currentUser) && userIsPlayer()
+    );
+}
 
 /* ============================================================
    ROUTE RENDERING
-   ============================================================ */
+============================================================ */
 
 async function renderRoute(route) {
     route = normalizeRoute(route);
 
-    if (!publicRoutes.includes(route) &&
-        !authenticatedRoutes.includes(route)) {
+    if (
+        !publicRoutes.includes(route) &&
+        !authenticatedRoutes.includes(route)
+    ) {
         route = currentUser
             ? getDefaultDashboard()
             : "home";
@@ -434,12 +574,26 @@ async function renderRoute(route) {
         route = "player-dashboard";
     }
 
+    if (
+        route === "player-dashboard" &&
+        currentUser &&
+        !userIsPlayer()
+    ) {
+        showToast(
+            "Player access is not available for this account.",
+            "error"
+        );
+
+        route = getDefaultDashboard();
+    }
+
     showPage(route);
 
     currentPage = route;
 
     updateNavigation(route);
     updateHeader();
+    updateModeButtons();
 
     closeMobileNav();
 
@@ -461,10 +615,9 @@ async function renderRoute(route) {
     }
 }
 
-
 /* ============================================================
    PLAYER DASHBOARD
-   ============================================================ */
+============================================================ */
 
 function renderPlayerDashboard() {
     if (!currentUser?.user) {
@@ -485,83 +638,97 @@ function renderPlayerDashboard() {
         user.firstName ||
         "Player";
 
-    const welcomeElement = $("#playerWelcomeName");
+    const welcomeElement =
+        $("#playerWelcomeName");
 
     if (welcomeElement) {
-        welcomeElement.textContent = welcomeName;
+        welcomeElement.textContent =
+            welcomeName;
     }
 
-    const accountName = $("#accountName");
+    const accountName =
+        $("#accountName");
 
     if (accountName) {
         accountName.textContent =
             fullName || "—";
     }
 
-    const accountEmail = $("#accountEmail");
+    const accountEmail =
+        $("#accountEmail");
 
     if (accountEmail) {
         accountEmail.textContent =
             user.email || "—";
     }
 
-    const accountPhone = $("#accountPhone");
+    const accountPhone =
+        $("#accountPhone");
 
     if (accountPhone) {
         accountPhone.textContent =
             user.phone || "Not provided";
     }
 
-    const accountStatus = $("#accountStatus");
+    const accountStatus =
+        $("#accountStatus");
 
     if (accountStatus) {
         accountStatus.textContent =
             formatStatus(user.status);
     }
 
-    const playerPoints = $("#playerPoints");
+    const playerPoints =
+        $("#playerPoints");
 
     if (playerPoints) {
         playerPoints.textContent = "0";
     }
 
-    const playerVipLevel = $("#playerVipLevel");
+    const playerVipLevel =
+        $("#playerVipLevel");
 
     if (playerVipLevel) {
         playerVipLevel.textContent = "Bronze";
     }
 
-    const playerRewards = $("#playerRewards");
+    const playerRewards =
+        $("#playerRewards");
 
     if (playerRewards) {
         playerRewards.textContent = "0";
     }
 
-    const playerReferrals = $("#playerReferrals");
+    const playerReferrals =
+        $("#playerReferrals");
 
     if (playerReferrals) {
         playerReferrals.textContent = "0";
     }
 
-    const vipCurrentLevel = $("#vipCurrentLevel");
+    const vipCurrentLevel =
+        $("#vipCurrentLevel");
 
     if (vipCurrentLevel) {
         vipCurrentLevel.textContent = "Bronze";
     }
 
-    const vipProgressPercent = $("#vipProgressPercent");
+    const vipProgressPercent =
+        $("#vipProgressPercent");
 
     if (vipProgressPercent) {
         vipProgressPercent.textContent = "0%";
     }
 
-    const vipProgressBar = $("#vipProgressBar");
+    const vipProgressBar =
+        $("#vipProgressBar");
 
     if (vipProgressBar) {
         vipProgressBar.style.width = "0%";
     }
 
-    const vipProgressText = $("#vipProgressText");
+    const vipProgressText =
+        $("#vipProgressText");
 
     if (vipProgressText) {
         vipProgressText.textContent =
@@ -569,18 +736,239 @@ function renderPlayerDashboard() {
     }
 
     if (playerProfile?.referral_code) {
-        // Referral code is available from the authenticated
-        // player profile and will be used by referral features later.
+        // Player referral features can be connected here later.
     }
 }
 
+/* ============================================================
+   PROMOTER REFERRAL STATS
+============================================================ */
+
+async function loadPromoterReferralStats() {
+    if (
+        !currentUser?.user ||
+        !userIsPromoter()
+    ) {
+        return;
+    }
+
+    try {
+        const data =
+            await apiRequest(
+                "/api/promoter/referrals"
+            );
+
+        if (!data?.ok) {
+            return;
+        }
+
+        const stats = data.stats || {};
+
+        const referralCount =
+            $("#promoterReferralCount");
+
+        if (referralCount) {
+            referralCount.textContent =
+                String(
+                    stats.registrations ??
+                    stats.referrals ??
+                    0
+                );
+        }
+
+        const qualifiedCount =
+            $("#promoterQualifiedCount");
+
+        if (qualifiedCount) {
+            qualifiedCount.textContent =
+                String(
+                    stats.qualified ??
+                    0
+                );
+        }
+
+        const earnings =
+            $("#promoterEarnings");
+
+        if (earnings) {
+            const earningsValue =
+                Number(
+                    stats.earnings ??
+                    stats.totalEarnings ??
+                    0
+                );
+
+            earnings.textContent =
+                `$${earningsValue.toFixed(2)}`;
+        }
+
+        const clicks =
+            $("#promoterClicks");
+
+        if (clicks) {
+            clicks.textContent =
+                String(
+                    stats.clicks ??
+                    0
+                );
+        }
+
+        renderPromoterReferralList(
+            Array.isArray(data.referrals)
+                ? data.referrals
+                : []
+        );
+    } catch (error) {
+        renderPromoterReferralList([]);
+        console.warn(
+            "Promoter referral stats are not available yet:",
+            error
+        );
+    }
+}
+
+/* ============================================================
+   PROMOTER REFERRAL LIST
+============================================================ */
+
+function renderPromoterReferralList(referrals) {
+    let container =
+        $("#promoterReferralList");
+
+    if (!container) {
+        const referralLink =
+            $("#promoterReferralLink");
+
+        if (!referralLink) {
+            return;
+        }
+
+        container =
+            document.createElement("div");
+
+        container.id =
+            "promoterReferralList";
+
+        container.className =
+            "promoter-referral-list";
+
+        container.style.marginTop = "24px";
+
+        const host =
+            referralLink.closest(
+                ".card, .panel, .section-card, .dashboard-card"
+            ) ||
+            referralLink.parentElement;
+
+        if (host?.parentElement) {
+            host.parentElement.appendChild(
+                container
+            );
+        } else if (referralLink.parentElement) {
+            referralLink.parentElement.appendChild(
+                container
+            );
+        } else {
+            return;
+        }
+    }
+
+    if (!Array.isArray(referrals) || referrals.length === 0) {
+        container.innerHTML = `
+            <div style="padding:20px;border:1px solid #e5e7eb;border-radius:16px;background:#fff">
+                <div style="font-weight:700;font-size:16px;margin-bottom:6px">Your Referrals</div>
+                <div style="color:#6b7280;font-size:14px">No one has registered through your referral link yet.</div>
+            </div>
+        `;
+        return;
+    }
+
+    const escapeHtml = (value) =>
+        String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    const formatDate = (value) => {
+        if (!value) {
+            return "—";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return escapeHtml(value);
+        }
+
+        return escapeHtml(
+            date.toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            })
+        );
+    };
+
+    const rows = referrals.map((referral) => {
+        const fullName = [
+            referral.firstName,
+            referral.lastName
+        ]
+            .filter(Boolean)
+            .join(" ") || "Unknown player";
+
+        return `
+            <tr>
+                <td style="padding:12px;border-bottom:1px solid #eef0f3">
+                    <strong>${escapeHtml(fullName)}</strong>
+                </td>
+                <td style="padding:12px;border-bottom:1px solid #eef0f3">
+                    ${escapeHtml(referral.email || "—")}
+                </td>
+                <td style="padding:12px;border-bottom:1px solid #eef0f3">
+                    ${escapeHtml(formatStatus(referral.status || "registered"))}
+                </td>
+                <td style="padding:12px;border-bottom:1px solid #eef0f3;white-space:nowrap">
+                    ${formatDate(referral.registeredAt)}
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    container.innerHTML = `
+        <div style="padding:20px;border:1px solid #e5e7eb;border-radius:16px;background:#fff;overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px">
+                <div>
+                    <div style="font-weight:700;font-size:16px">Your Referrals</div>
+                    <div style="color:#6b7280;font-size:13px;margin-top:4px">People who registered through your promoter referral link.</div>
+                </div>
+                <div style="font-weight:700;font-size:20px">${referrals.length}</div>
+            </div>
+            <div style="overflow-x:auto">
+                <table style="width:100%;border-collapse:collapse;min-width:620px;font-size:14px">
+                    <thead>
+                        <tr style="text-align:left;background:#f8fafc">
+                            <th style="padding:12px">Player</th>
+                            <th style="padding:12px">Email</th>
+                            <th style="padding:12px">Status</th>
+                            <th style="padding:12px">Registered</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+}
 
 /* ============================================================
    PROMOTER DASHBOARD
-   ============================================================ */
+============================================================ */
 
 function renderPromoterDashboard() {
-    if (!currentUser?.user) {
+    if (!currentUser?.user || !userIsPromoter()) {
         return;
     }
 
@@ -631,22 +1019,33 @@ function renderPromoterDashboard() {
                 "Your promoter referral link will appear here.";
         }
     }
-}
 
+    loadPromoterReferralStats();
+}
 
 /* ============================================================
    ADMIN DASHBOARD
-   ============================================================ */
+============================================================ */
 
 function renderAdminDashboard() {
-    if (!currentUser?.user || !userIsAdmin()) {
+    if (
+        !currentUser?.user ||
+        !userIsAdmin()
+    ) {
         return;
     }
 
-    const players = $("#adminPlayers");
-    const promoters = $("#adminPromoters");
-    const rewards = $("#adminRewards");
-    const support = $("#adminSupport");
+    const players =
+        $("#adminPlayers");
+
+    const promoters =
+        $("#adminPromoters");
+
+    const rewards =
+        $("#adminRewards");
+
+    const support =
+        $("#adminSupport");
 
     if (players) {
         players.textContent = "0";
@@ -665,10 +1064,9 @@ function renderAdminDashboard() {
     }
 }
 
-
 /* ============================================================
    FORMATTING
-   ============================================================ */
+============================================================ */
 
 function formatStatus(status) {
     if (!status) {
@@ -678,13 +1076,14 @@ function formatStatus(status) {
     return status
         .toString()
         .replace(/[_-]/g, " ")
-        .replace(/\b\w/g, (letter) => letter.toUpperCase());
+        .replace(/\b\w/g, (letter) =>
+            letter.toUpperCase()
+        );
 }
-
 
 /* ============================================================
    LOGIN
-   ============================================================ */
+============================================================ */
 
 async function handleLogin(event) {
     event.preventDefault();
@@ -704,6 +1103,16 @@ async function handleLogin(event) {
             "loginMessage",
             "Please enter your email address."
         );
+
+        return;
+    }
+
+    if (!isValidEmail(email)) {
+        showFormMessage(
+            "loginMessage",
+            "Please enter a valid email address."
+        );
+
         return;
     }
 
@@ -712,6 +1121,7 @@ async function handleLogin(event) {
             "loginMessage",
             "Please enter your password."
         );
+
         return;
     }
 
@@ -724,22 +1134,28 @@ async function handleLogin(event) {
 
     if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = "Signing in...";
+
+        submitButton.textContent =
+            "Signing in...";
     }
 
-    setLoading(true, "Signing in...");
+    setLoading(
+        true,
+        "Signing in..."
+    );
 
     try {
-        const data = await apiRequest(
-            "/api/auth/login",
-            {
-                method: "POST",
-                body: {
-                    email,
-                    password
+        const data =
+            await apiRequest(
+                "/api/auth/login",
+                {
+                    method: "POST",
+                    body: {
+                        email,
+                        password
+                    }
                 }
-            }
-        );
+            );
 
         if (!data?.ok) {
             throw new Error(
@@ -756,6 +1172,11 @@ async function handleLogin(event) {
             );
         }
 
+        console.log(
+            "Authenticated user roles:",
+            getUserRoles()
+        );
+
         form.reset();
 
         showToast(
@@ -763,10 +1184,14 @@ async function handleLogin(event) {
             "success"
         );
 
-        setRoute(getDefaultDashboard());
-
+        setRoute(
+            getDefaultDashboard()
+        );
     } catch (error) {
-        console.error("Login error:", error);
+        console.error(
+            "Login error:",
+            error
+        );
 
         showFormMessage(
             "loginMessage",
@@ -774,21 +1199,21 @@ async function handleLogin(event) {
             error?.message ||
             "Unable to sign in. Please try again."
         );
-
     } finally {
         setLoading(false);
 
         if (submitButton) {
             submitButton.disabled = false;
-            submitButton.textContent = originalText;
+
+            submitButton.textContent =
+                originalText;
         }
     }
 }
 
-
 /* ============================================================
    REGISTRATION
-   ============================================================ */
+============================================================ */
 
 async function handleRegistration(event) {
     event.preventDefault();
@@ -820,14 +1245,25 @@ async function handleRegistration(event) {
         "player";
 
     const termsAccepted =
-        $("#registerTerms")?.checked || false;
+        $("#registerTerms")?.checked ||
+        false;
 
+    /*
+     * Capture referral code before the account is created.
+     *
+     * Example:
+     * #register?ref=PROMO123
+     */
+
+    const referralCode =
+        getReferralCodeFromHash();
 
     if (!firstName) {
         showFormMessage(
             "registerMessage",
             "Please enter your first name."
         );
+
         return;
     }
 
@@ -836,6 +1272,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Please enter your last name."
         );
+
         return;
     }
 
@@ -844,6 +1281,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Please enter your email address."
         );
+
         return;
     }
 
@@ -852,6 +1290,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Please enter a valid email address."
         );
+
         return;
     }
 
@@ -860,6 +1299,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Password must be at least 8 characters."
         );
+
         return;
     }
 
@@ -868,6 +1308,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Passwords do not match."
         );
+
         return;
     }
 
@@ -876,6 +1317,7 @@ async function handleRegistration(event) {
             "registerMessage",
             "Please accept the Terms, Privacy Policy and Responsible Play guidelines."
         );
+
         return;
     }
 
@@ -888,26 +1330,34 @@ async function handleRegistration(event) {
 
     if (submitButton) {
         submitButton.disabled = true;
-        submitButton.textContent = "Creating account...";
+
+        submitButton.textContent =
+            "Creating account...";
     }
 
-    setLoading(true, "Creating your account...");
+    setLoading(
+        true,
+        "Creating your account..."
+    );
 
     try {
-        const data = await apiRequest(
-            "/api/auth/register",
-            {
-                method: "POST",
-                body: {
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    password,
-                    accountExperience
+        const data =
+            await apiRequest(
+                "/api/auth/register",
+                {
+                    method: "POST",
+                    body: {
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        password,
+                        accountExperience,
+                        referralCode:
+                            referralCode || null
+                    }
                 }
-            }
-        );
+            );
 
         if (!data?.ok) {
             throw new Error(
@@ -924,15 +1374,23 @@ async function handleRegistration(event) {
             );
         }
 
+        console.log(
+            "New account roles:",
+            getUserRoles()
+        );
+
         form.reset();
 
         showToast(
-            "Your account has been created successfully.",
+            referralCode
+                ? "Your account has been created and your referral was recorded."
+                : "Your account has been created successfully.",
             "success"
         );
 
-        setRoute(getDefaultDashboard());
-
+        setRoute(
+            getDefaultDashboard()
+        );
     } catch (error) {
         console.error(
             "Registration error:",
@@ -945,24 +1403,27 @@ async function handleRegistration(event) {
             error?.message ||
             "Unable to create your account. Please try again."
         );
-
     } finally {
         setLoading(false);
 
         if (submitButton) {
             submitButton.disabled = false;
-            submitButton.textContent = originalText;
+
+            submitButton.textContent =
+                originalText;
         }
     }
 }
 
-
 /* ============================================================
    LOGOUT
-   ============================================================ */
+============================================================ */
 
 async function logout() {
-    setLoading(true, "Signing out...");
+    setLoading(
+        true,
+        "Signing out..."
+    );
 
     try {
         await apiRequest(
@@ -971,17 +1432,16 @@ async function logout() {
                 method: "POST"
             }
         );
-
     } catch (error) {
         console.error(
             "Logout error:",
             error
         );
-
     } finally {
         currentUser = null;
 
         updateHeader();
+        updateModeButtons();
 
         setLoading(false);
 
@@ -994,10 +1454,9 @@ async function logout() {
     }
 }
 
-
 /* ============================================================
    EMAIL VALIDATION
-   ============================================================ */
+============================================================ */
 
 function isValidEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
@@ -1005,10 +1464,9 @@ function isValidEmail(email) {
     );
 }
 
-
 /* ============================================================
    PASSWORD VISIBILITY
-   ============================================================ */
+============================================================ */
 
 function setupPasswordVisibility() {
     const checkbox =
@@ -1032,13 +1490,11 @@ function setupPasswordVisibility() {
     );
 }
 
-
 /* ============================================================
    NAVIGATION BUTTONS
-   ============================================================ */
+============================================================ */
 
 function setupNavigationButtons() {
-
     const loginNavButton =
         $("#loginNavButton");
 
@@ -1047,14 +1503,15 @@ function setupNavigationButtons() {
             "click",
             () => {
                 if (currentUser) {
-                    setRoute(getDefaultDashboard());
+                    setRoute(
+                        getDefaultDashboard()
+                    );
                 } else {
                     setRoute("login");
                 }
             }
         );
     }
-
 
     const registerNavButton =
         $("#registerNavButton");
@@ -1072,7 +1529,6 @@ function setupNavigationButtons() {
         );
     }
 
-
     const mobileLoginButton =
         $("#mobileLoginButton");
 
@@ -1083,14 +1539,15 @@ function setupNavigationButtons() {
                 closeMobileNav();
 
                 if (currentUser) {
-                    setRoute(getDefaultDashboard());
+                    setRoute(
+                        getDefaultDashboard()
+                    );
                 } else {
                     setRoute("login");
                 }
             }
         );
     }
-
 
     const mobileRegisterButton =
         $("#mobileRegisterButton");
@@ -1110,7 +1567,6 @@ function setupNavigationButtons() {
         );
     }
 
-
     const heroLoginButton =
         $("#heroLoginButton");
 
@@ -1120,7 +1576,6 @@ function setupNavigationButtons() {
             () => setRoute("login")
         );
     }
-
 
     const heroRegisterButton =
         $("#heroRegisterButton");
@@ -1132,7 +1587,6 @@ function setupNavigationButtons() {
         );
     }
 
-
     const loginRegisterButton =
         $("#loginRegisterButton");
 
@@ -1142,7 +1596,6 @@ function setupNavigationButtons() {
             () => setRoute("register")
         );
     }
-
 
     const registerLoginButton =
         $("#registerLoginButton");
@@ -1154,7 +1607,6 @@ function setupNavigationButtons() {
         );
     }
 
-
     const supportLoginButton =
         $("#supportLoginButton");
 
@@ -1164,7 +1616,6 @@ function setupNavigationButtons() {
             () => setRoute("login")
         );
     }
-
 
     const forgotPasswordButton =
         $("#forgotPasswordButton");
@@ -1181,7 +1632,6 @@ function setupNavigationButtons() {
         );
     }
 
-
     const mobileMenuButton =
         $("#mobileMenuButton");
 
@@ -1193,13 +1643,11 @@ function setupNavigationButtons() {
     }
 }
 
-
 /* ============================================================
    DASHBOARD BUTTONS
-   ============================================================ */
+============================================================ */
 
 function setupDashboardButtons() {
-
     const playerLogout =
         $("#playerLogoutButton");
 
@@ -1209,7 +1657,6 @@ function setupDashboardButtons() {
             logout
         );
     }
-
 
     const promoterLogout =
         $("#promoterLogoutButton");
@@ -1221,7 +1668,6 @@ function setupDashboardButtons() {
         );
     }
 
-
     const adminLogout =
         $("#adminLogoutButton");
 
@@ -1232,6 +1678,9 @@ function setupDashboardButtons() {
         );
     }
 
+    /*
+     * PLAYER DASHBOARD -> PROMOTER MODE
+     */
 
     const playerMode =
         $("#playerModeButton");
@@ -1239,10 +1688,24 @@ function setupDashboardButtons() {
     if (playerMode) {
         playerMode.addEventListener(
             "click",
-            () => setRoute("player-dashboard")
+            () => {
+                if (userIsPromoter()) {
+                    setRoute(
+                        "promoter-dashboard"
+                    );
+                } else {
+                    showToast(
+                        "Promoter access is not available for this account.",
+                        "error"
+                    );
+                }
+            }
         );
     }
 
+    /*
+     * PROMOTER DASHBOARD -> PLAYER MODE
+     */
 
     const promoterPlayerMode =
         $("#promoterPlayerModeButton");
@@ -1250,10 +1713,20 @@ function setupDashboardButtons() {
     if (promoterPlayerMode) {
         promoterPlayerMode.addEventListener(
             "click",
-            () => setRoute("player-dashboard")
+            () => {
+                if (userIsPlayer()) {
+                    setRoute(
+                        "player-dashboard"
+                    );
+                } else {
+                    showToast(
+                        "Player mode is not available for this account.",
+                        "error"
+                    );
+                }
+            }
         );
     }
-
 
     const copyReferralButton =
         $("#copyReferralButton");
@@ -1264,7 +1737,6 @@ function setupDashboardButtons() {
             copyReferralLink
         );
     }
-
 
     $$("[data-admin-module]").forEach(
         (button) => {
@@ -1284,10 +1756,9 @@ function setupDashboardButtons() {
     );
 }
 
-
 /* ============================================================
    COPY REFERRAL
-   ============================================================ */
+============================================================ */
 
 async function copyReferralLink() {
     const element =
@@ -1315,7 +1786,6 @@ async function copyReferralLink() {
             "Referral link copied.",
             "success"
         );
-
     } catch (error) {
         console.error(
             "Clipboard error:",
@@ -1329,24 +1799,24 @@ async function copyReferralLink() {
     }
 }
 
-
 /* ============================================================
    CAPITALIZE
-   ============================================================ */
+============================================================ */
 
 function capitalize(value) {
     if (!value) {
         return "";
     }
 
-    return value.charAt(0).toUpperCase() +
-        value.slice(1);
+    return (
+        value.charAt(0).toUpperCase() +
+        value.slice(1)
+    );
 }
-
 
 /* ============================================================
    ROUTE LINKS
-   ============================================================ */
+============================================================ */
 
 function setupRouteLinks() {
     $$("[data-route]").forEach(
@@ -1362,7 +1832,7 @@ function setupRouteLinks() {
                     if (
                         link.tagName === "A" &&
                         link.getAttribute("href") ===
-                        `#${route}`
+                            `#${route}`
                     ) {
                         return;
                     }
@@ -1376,13 +1846,11 @@ function setupRouteLinks() {
     );
 }
 
-
 /* ============================================================
    FORM SETUP
-   ============================================================ */
+============================================================ */
 
 function setupForms() {
-
     const loginForm =
         $("#loginForm");
 
@@ -1392,7 +1860,6 @@ function setupForms() {
             handleLogin
         );
     }
-
 
     const registerForm =
         $("#registerForm");
@@ -1405,13 +1872,13 @@ function setupForms() {
     }
 }
 
-
 /* ============================================================
    FOOTER YEAR
-   ============================================================ */
+============================================================ */
 
 function setupFooterYear() {
-    const year = $("#footerYear");
+    const year =
+        $("#footerYear");
 
     if (year) {
         year.textContent =
@@ -1419,13 +1886,11 @@ function setupFooterYear() {
     }
 }
 
-
 /* ============================================================
    KEYBOARD / HASH EVENTS
-   ============================================================ */
+============================================================ */
 
 function setupGlobalEvents() {
-
     window.addEventListener(
         "hashchange",
         () => {
@@ -1434,7 +1899,6 @@ function setupGlobalEvents() {
             );
         }
     );
-
 
     document.addEventListener(
         "keydown",
@@ -1449,25 +1913,17 @@ function setupGlobalEvents() {
     );
 }
 
-
 /* ============================================================
    INITIALIZATION
-   ============================================================ */
+============================================================ */
 
 async function initializeApp() {
-
     setupFooterYear();
-
     setupNavigationButtons();
-
     setupDashboardButtons();
-
     setupPasswordVisibility();
-
     setupForms();
-
     setupRouteLinks();
-
     setupGlobalEvents();
 
     setLoading(
@@ -1478,6 +1934,7 @@ async function initializeApp() {
     await loadCurrentUser();
 
     updateHeader();
+    updateModeButtons();
 
     setLoading(false);
 
@@ -1504,7 +1961,15 @@ async function initializeApp() {
         currentUser &&
         !userIsPromoter()
     ) {
-        route = "player-dashboard";
+        route = getDefaultDashboard();
+    }
+
+    if (
+        route === "player-dashboard" &&
+        currentUser &&
+        !userIsPlayer()
+    ) {
+        route = getDefaultDashboard();
     }
 
     if (!route) {
@@ -1514,10 +1979,9 @@ async function initializeApp() {
     await renderRoute(route);
 }
 
-
 /* ============================================================
    START
-   ============================================================ */
+============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
