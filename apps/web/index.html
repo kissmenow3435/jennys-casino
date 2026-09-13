@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Jenny's Casino | Premium Account Portal</title>
+
+    <meta
+        name="description"
+        content="Jenny's Casino premium account portal. Manage your account, rewards, VIP status, referrals and more."
+    >
+
+    <meta name="theme-color" content="#f5f7fb">
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         APP SHELL
+         ========================================================= -->
+
+    <div id="app">
+
+        <!-- =====================================================
+             PUBLIC NAVIGATION
+             ===================================================== -->
+
+        <header class="site-header" id="siteHeader">
+
+            <div class="container header-inner">
+
+                <a href="#home" class="brand" data-route="home">
+                    <span class="brand-name">JENNY'S CASINO</span>
+                    <span class="brand-subtitle">Premium Account Portal</span>
+                </a>
+
+                <nav class="main-nav" id="publicNav">
+                    <a href="#home" data-route="home">Home</a>
+                    <a href="#faq" data-route="faq">FAQ</a>
+                    <a href="#support" data-route="support">Support</a>
+                    <a href="#terms" data-route="terms">Terms</a>
+                    <a href="#privacy" data-route="privacy">Privacy</a>
+                </nav>
+
+                <div class="header-actions">
+                    <button
+                        class="btn btn-secondary"
+                        id="loginNavButton"
+                        type="button"
+                    >
+                        Sign In
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        id="registerNavButton"
+                        type="button"
+                    >
+                        Create Account
+                    </button>
+
+                    <button
+                        class="mobile-menu-button"
+                        id="mobileMenuButton"
+                        type="button"
+                        aria-label="Open navigation"
+                        aria-expanded="false"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="mobile-nav" id="mobileNav">
+                <a href="#home" data-route="home">Home</a>
+                <a href="#faq" data-route="faq">FAQ</a>
+                <a href="#support" data-route="support">Support</a>
+                <a href="#terms" data-route="terms">Terms</a>
+                <a href="#privacy" data-route="privacy">Privacy</a>
+
+                <div class="mobile-nav-actions">
+                    <button
+                        class="btn btn-secondary"
+                        id="mobileLoginButton"
+                        type="button"
+                    >
+                        Sign In
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        id="mobileRegisterButton"
+                        type="button"
+                    >
+                        Create Account
+                    </button>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             MAIN APPLICATION
+             ===================================================== -->
+
+        <main id="mainContent">
+
+            <!-- =================================================
+                 HOME
+                 ================================================= -->
+
+            <section
+                class="page-section page-home"
+                id="page-home"
+                data-page="home"
+            >
+
+                <div class="container">
+
+                    <div class="hero">
+
+                        <div class="hero-content">
+
+                            <div class="eyebrow">
+                                <span class="eyebrow-dot"></span>
+                                PREMIUM ACCOUNT PORTAL
+                            </div>
+
+                            <h1>
+                                Your account.
+                                <span>Your rewards.</span>
+                                Your dashboard.
+                            </h1>
+
+                            <p class="hero-description">
+                                A modern account experience built for Jenny's
+                                Casino. Manage your profile, track rewards,
+                                monitor VIP progress and access your account
+                                from one secure place.
+                            </p>
+
+                            <div class="hero-actions">
+
+                                <button
+                                    class="btn btn-primary btn-large"
+                                    id="heroRegisterButton"
+                                    type="button"
+                                >
+                                    Create Your Account
+                                </button>
+
+                                <button
+                                    class="btn btn-secondary btn-large"
+                                    id="heroLoginButton"
+                                    type="button"
+                                >
+                                    Sign In
+                                </button>
+
+                            </div>
+
+                            <div class="hero-note">
+                                <span class="status-dot"></span>
+                                Secure account access
+                            </div>
+
+                        </div>
+
+
+                        <div class="hero-panel">
+
+                            <div class="dashboard-preview">
+
+                                <div class="preview-topbar">
+                                    <div>
+                                        <span class="preview-label">
+                                            ACCOUNT OVERVIEW
+                                        </span>
+                                        <strong>Welcome back</strong>
+                                    </div>
+
+                                    <div class="preview-avatar">
+                                        JC
+                                    </div>
+                                </div>
+
+                                <div class="preview-balance">
+                                    <span>LOYALTY POINTS</span>
+                                    <strong>2,480</strong>
+                                    <small>+320 this month</small>
+                                </div>
+
+                                <div class="preview-grid">
+
+                                    <div class="preview-card">
+                                        <span>VIP STATUS</span>
+                                        <strong>Silver</strong>
+                                    </div>
+
+                                    <div class="preview-card">
+                                        <span>REWARDS</span>
+                                        <strong>3 Available</strong>
+                                    </div>
+
+                                </div>
+
+                                <div class="preview-progress">
+
+                                    <div class="progress-heading">
+                                        <span>VIP Progress</span>
+                                        <span>68%</span>
+                                    </div>
+
+                                    <div class="progress-track">
+                                        <div
+                                            class="progress-fill"
+                                            style="width: 68%;"
+                                        ></div>
+                                    </div>
+
+                                    <small>
+                                        Keep progressing toward your next
+                                        VIP level.
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         FEATURE CARDS
+                         ========================================= -->
+
+                    <div class="section-heading">
+                        <span class="eyebrow">ONE ACCOUNT</span>
+                        <h2>Everything in one place.</h2>
+                        <p>
+                            Your account portal keeps the important things
+                            organized and easy to access.
+                        </p>
+                    </div>
+
+                    <div class="feature-grid">
+
+                        <article class="feature-card">
+                            <div class="feature-icon">01</div>
+                            <h3>Player Dashboard</h3>
+                            <p>
+                                View your account, activity, loyalty progress,
+                                rewards and important account information.
+                            </p>
+                        </article>
+
+                        <article class="feature-card">
+                            <div class="feature-icon">02</div>
+                            <h3>VIP & Loyalty</h3>
+                            <p>
+                                Follow your loyalty progress and see your
+                                current VIP level and available benefits.
+                            </p>
+                        </article>
+
+                        <article class="feature-card">
+                            <div class="feature-icon">03</div>
+                            <h3>Rewards</h3>
+                            <p>
+                                Keep track of available rewards and your
+                                reward claim history.
+                            </p>
+                        </article>
+
+                        <article class="feature-card">
+                            <div class="feature-icon">04</div>
+                            <h3>Promoter Tools</h3>
+                            <p>
+                                Eligible users can access referrals, earnings,
+                                analytics and promoter tools.
+                            </p>
+                        </article>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         BRAND CONNECTIONS
+                         ========================================= -->
+
+                    <div class="brand-section">
+
+                        <div class="section-heading compact">
+                            <span class="eyebrow">OUR BRANDS</span>
+                            <h2>Stay connected.</h2>
+                            <p>
+                                Visit our official social pages for updates
+                                and announcements.
+                            </p>
+                        </div>
+
+                        <div class="brand-links">
+
+                            <a
+                                href="https://www.facebook.com/JackpotHUBGaming?mibextid=wwXIfr&mibextid=wwXIfr"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="brand-link"
+                            >
+                                <span class="brand-link-icon">f</span>
+
+                                <span>
+                                    <small>Facebook</small>
+                                    <strong>Jackpot HUB Gaming</strong>
+                                </span>
+
+                                <span class="brand-link-arrow">→</span>
+                            </a>
+
+
+                            <a
+                                href="https://www.facebook.com/profile.php?id=61593623518997&mibextid=wwXIfr&mibextid=wwXIfr"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="brand-link"
+                            >
+                                <span class="brand-link-icon">f</span>
+
+                                <span>
+                                    <small>Facebook</small>
+                                    <strong>Jenny Sweeps</strong>
+                                </span>
+
+                                <span class="brand-link-arrow">→</span>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 LOGIN
+                 ================================================= -->
+
+            <section
+                class="page-section auth-page"
+                id="page-login"
+                data-page="login"
+            >
+
+                <div class="container auth-container">
+
+                    <div class="auth-card">
+
+                        <div class="auth-header">
+                            <span class="eyebrow">SECURE ACCESS</span>
+
+                            <h1>Welcome back.</h1>
+
+                            <p>
+                                Sign in to access your Jenny's Casino account.
+                            </p>
+                        </div>
+
+                        <form id="loginForm" novalidate>
+
+                            <div
+                                class="form-message"
+                                id="loginMessage"
+                                hidden
+                            ></div>
+
+                            <div class="form-group">
+
+                                <label for="loginEmail">
+                                    Email address
+                                </label>
+
+                                <input
+                                    id="loginEmail"
+                                    name="email"
+                                    type="email"
+                                    autocomplete="email"
+                                    placeholder="you@example.com"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="loginPassword">
+                                    Password
+                                </label>
+
+                                <input
+                                    id="loginPassword"
+                                    name="password"
+                                    type="password"
+                                    autocomplete="current-password"
+                                    placeholder="Enter your password"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-row form-row-between">
+
+                                <label class="checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        id="showLoginPassword"
+                                    >
+                                    <span>Show password</span>
+                                </label>
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="forgotPasswordButton"
+                                >
+                                    Forgot password?
+                                </button>
+
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-full btn-large"
+                                id="loginSubmitButton"
+                            >
+                                Sign In
+                            </button>
+
+                        </form>
+
+                        <div class="auth-footer">
+                            Don't have an account?
+                            <button
+                                type="button"
+                                class="text-button"
+                                id="loginRegisterButton"
+                            >
+                                Create one
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 REGISTRATION
+                 ================================================= -->
+
+            <section
+                class="page-section auth-page"
+                id="page-register"
+                data-page="register"
+            >
+
+                <div class="container auth-container">
+
+                    <div class="auth-card auth-card-wide">
+
+                        <div class="auth-header">
+                            <span class="eyebrow">CREATE ACCOUNT</span>
+
+                            <h1>Let's get started.</h1>
+
+                            <p>
+                                Create your Jenny's Casino account in a few
+                                simple steps.
+                            </p>
+                        </div>
+
+                        <form id="registerForm" novalidate>
+
+                            <div
+                                class="form-message"
+                                id="registerMessage"
+                                hidden
+                            ></div>
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label for="registerFirstName">
+                                        First name
+                                    </label>
+
+                                    <input
+                                        id="registerFirstName"
+                                        name="firstName"
+                                        type="text"
+                                        autocomplete="given-name"
+                                        placeholder="First name"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="registerLastName">
+                                        Last name
+                                    </label>
+
+                                    <input
+                                        id="registerLastName"
+                                        name="lastName"
+                                        type="text"
+                                        autocomplete="family-name"
+                                        placeholder="Last name"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="registerEmail">
+                                    Email address
+                                </label>
+
+                                <input
+                                    id="registerEmail"
+                                    name="email"
+                                    type="email"
+                                    autocomplete="email"
+                                    placeholder="you@example.com"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="registerPhone">
+                                    Phone number
+                                </label>
+
+                                <input
+                                    id="registerPhone"
+                                    name="phone"
+                                    type="tel"
+                                    autocomplete="tel"
+                                    placeholder="Phone number"
+                                >
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label for="registerPassword">
+                                        Password
+                                    </label>
+
+                                    <input
+                                        id="registerPassword"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        placeholder="Create a password"
+                                        minlength="8"
+                                        required
+                                    >
+
+                                </div>
+
+                                <div class="form-group">
+
+                                    <label for="registerConfirmPassword">
+                                        Confirm password
+                                    </label>
+
+                                    <input
+                                        id="registerConfirmPassword"
+                                        name="confirmPassword"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        placeholder="Confirm your password"
+                                        minlength="8"
+                                        required
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="accountExperience">
+                                    Account type
+                                </label>
+
+                                <select
+                                    id="accountExperience"
+                                    name="accountExperience"
+                                    required
+                                >
+                                    <option value="player">
+                                        Player Account
+                                    </option>
+
+                                    <option value="player_promoter">
+                                        Player + Promoter Account
+                                    </option>
+                                </select>
+
+                                <small class="field-help">
+                                    You can use your account as a player.
+                                    Promoter tools are available for eligible
+                                    promoter accounts.
+                                </small>
+
+                            </div>
+
+
+                            <label class="checkbox-label terms-checkbox">
+
+                                <input
+                                    type="checkbox"
+                                    id="registerTerms"
+                                    required
+                                >
+
+                                <span>
+                                    I agree to the Jenny's Casino Terms,
+                                    Privacy Policy and Responsible Play
+                                    guidelines.
+                                </span>
+
+                            </label>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-full btn-large"
+                                id="registerSubmitButton"
+                            >
+                                Create Account
+                            </button>
+
+                        </form>
+
+
+                        <div class="auth-footer">
+                            Already have an account?
+
+                            <button
+                                type="button"
+                                class="text-button"
+                                id="registerLoginButton"
+                            >
+                                Sign in
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PLAYER DASHBOARD
+                 ================================================= -->
+
+            <section
+                class="page-section dashboard-page"
+                id="page-player-dashboard"
+                data-page="player-dashboard"
+            >
+
+                <div class="container">
+
+                    <div class="dashboard-header">
+
+                        <div>
+                            <span class="eyebrow">PLAYER DASHBOARD</span>
+                            <h1>
+                                Welcome,
+                                <span id="playerWelcomeName">Player</span>.
+                            </h1>
+
+                            <p>
+                                Here's your account overview.
+                            </p>
+                        </div>
+
+                        <div class="dashboard-actions">
+
+                            <button
+                                class="btn btn-secondary"
+                                id="playerModeButton"
+                                type="button"
+                            >
+                                Player Mode
+                            </button>
+
+                            <button
+                                class="btn btn-primary"
+                                id="playerLogoutButton"
+                                type="button"
+                            >
+                                Sign Out
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-grid">
+
+                        <div class="dashboard-stat-card">
+
+                            <span class="stat-label">
+                                LOYALTY POINTS
+                            </span>
+
+                            <strong id="playerPoints">
+                                0
+                            </strong>
+
+                            <small>
+                                Current balance
+                            </small>
+
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+
+                            <span class="stat-label">
+                                VIP LEVEL
+                            </span>
+
+                            <strong id="playerVipLevel">
+                                Bronze
+                            </strong>
+
+                            <small>
+                                Current status
+                            </small>
+
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+
+                            <span class="stat-label">
+                                REWARDS
+                            </span>
+
+                            <strong id="playerRewards">
+                                0
+                            </strong>
+
+                            <small>
+                                Available
+                            </small>
+
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+
+                            <span class="stat-label">
+                                REFERRALS
+                            </span>
+
+                            <strong id="playerReferrals">
+                                0
+                            </strong>
+
+                            <small>
+                                Your referrals
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-layout">
+
+                        <div class="dashboard-main-card">
+
+                            <div class="card-header">
+                                <div>
+                                    <span class="eyebrow">ACCOUNT</span>
+                                    <h2>Account overview</h2>
+                                </div>
+                            </div>
+
+                            <div class="account-details">
+
+                                <div>
+                                    <span>Name</span>
+                                    <strong id="accountName">
+                                        —
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Email</span>
+                                    <strong id="accountEmail">
+                                        —
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Phone</span>
+                                    <strong id="accountPhone">
+                                        —
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Account status</span>
+                                    <strong id="accountStatus">
+                                        —
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="dashboard-side-card">
+
+                            <span class="eyebrow">
+                                LOYALTY
+                            </span>
+
+                            <h2>VIP progress</h2>
+
+                            <div class="vip-progress">
+
+                                <div class="progress-heading">
+                                    <span id="vipCurrentLevel">
+                                        Bronze
+                                    </span>
+
+                                    <span id="vipProgressPercent">
+                                        0%
+                                    </span>
+                                </div>
+
+                                <div class="progress-track">
+                                    <div
+                                        class="progress-fill"
+                                        id="vipProgressBar"
+                                        style="width: 0%;"
+                                    ></div>
+                                </div>
+
+                            </div>
+
+                            <p id="vipProgressText">
+                                Your VIP progress will appear here.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PROMOTER DASHBOARD
+                 ================================================= -->
+
+            <section
+                class="page-section dashboard-page"
+                id="page-promoter-dashboard"
+                data-page="promoter-dashboard"
+            >
+
+                <div class="container">
+
+                    <div class="dashboard-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                PROMOTER DASHBOARD
+                            </span>
+
+                            <h1>
+                                Grow your network.
+                            </h1>
+
+                            <p>
+                                Manage referrals, earnings and promoter
+                                activity.
+                            </p>
+                        </div>
+
+                        <div class="dashboard-actions">
+
+                            <button
+                                class="btn btn-secondary"
+                                id="promoterPlayerModeButton"
+                                type="button"
+                            >
+                                Player Mode
+                            </button>
+
+                            <button
+                                class="btn btn-primary"
+                                id="promoterLogoutButton"
+                                type="button"
+                            >
+                                Sign Out
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-grid">
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                REFERRALS
+                            </span>
+
+                            <strong id="promoterReferralCount">
+                                0
+                            </strong>
+
+                            <small>
+                                Total referrals
+                            </small>
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                QUALIFIED
+                            </span>
+
+                            <strong id="promoterQualifiedCount">
+                                0
+                            </strong>
+
+                            <small>
+                                Qualified referrals
+                            </small>
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                EARNINGS
+                            </span>
+
+                            <strong id="promoterEarnings">
+                                $0.00
+                            </strong>
+
+                            <small>
+                                Current earnings
+                            </small>
+                        </div>
+
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                CLICKS
+                            </span>
+
+                            <strong id="promoterClicks">
+                                0
+                            </strong>
+
+                            <small>
+                                Referral link clicks
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="dashboard-main-card">
+
+                        <div class="card-header">
+
+                            <div>
+                                <span class="eyebrow">
+                                    REFERRAL TOOLS
+                                </span>
+
+                                <h2>Your referral link</h2>
+                            </div>
+
+                            <button
+                                class="btn btn-secondary"
+                                id="copyReferralButton"
+                                type="button"
+                            >
+                                Copy Link
+                            </button>
+
+                        </div>
+
+
+                        <div class="referral-box">
+
+                            <span id="promoterReferralLink">
+                                Your referral link will appear here.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ADMIN DASHBOARD
+                 ================================================= -->
+
+            <section
+                class="page-section dashboard-page"
+                id="page-admin-dashboard"
+                data-page="admin-dashboard"
+            >
+
+                <div class="container">
+
+                    <div class="dashboard-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                ADMIN DASHBOARD
+                            </span>
+
+                            <h1>
+                                Administration center.
+                            </h1>
+
+                            <p>
+                                Manage the platform from one secure
+                                administration area.
+                            </p>
+                        </div>
+
+                        <button
+                            class="btn btn-primary"
+                            id="adminLogoutButton"
+                            type="button"
+                        >
+                            Sign Out
+                        </button>
+
+                    </div>
+
+
+                    <div class="dashboard-grid">
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                PLAYERS
+                            </span>
+
+                            <strong id="adminPlayers">
+                                0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                PROMOTERS
+                            </span>
+
+                            <strong id="adminPromoters">
+                                0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                REWARDS
+                            </span>
+
+                            <strong id="adminRewards">
+                                0
+                            </strong>
+                        </div>
+
+                        <div class="dashboard-stat-card">
+                            <span class="stat-label">
+                                SUPPORT
+                            </span>
+
+                            <strong id="adminSupport">
+                                0
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-grid">
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="players"
+                        >
+                            <span>01</span>
+                            <strong>Players</strong>
+                            <small>Manage player accounts</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="promoters"
+                        >
+                            <span>02</span>
+                            <strong>Promoters</strong>
+                            <small>Manage promoter accounts</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="rewards"
+                        >
+                            <span>03</span>
+                            <strong>Rewards</strong>
+                            <small>Manage platform rewards</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="vip"
+                        >
+                            <span>04</span>
+                            <strong>VIP & Loyalty</strong>
+                            <small>Configure loyalty and VIP</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="referrals"
+                        >
+                            <span>05</span>
+                            <strong>Referrals</strong>
+                            <small>Referral configuration</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="payouts"
+                        >
+                            <span>06</span>
+                            <strong>Payouts</strong>
+                            <small>Review payout activity</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="analytics"
+                        >
+                            <span>07</span>
+                            <strong>Analytics</strong>
+                            <small>Platform performance</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="support"
+                        >
+                            <span>08</span>
+                            <strong>Support</strong>
+                            <small>Manage support requests</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="audit"
+                        >
+                            <span>09</span>
+                            <strong>Audit Logs</strong>
+                            <small>Review system activity</small>
+                        </button>
+
+                        <button
+                            class="admin-module-card"
+                            type="button"
+                            data-admin-module="settings"
+                        >
+                            <span>10</span>
+                            <strong>Settings</strong>
+                            <small>Platform configuration</small>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 FAQ
+                 ================================================= -->
+
+            <section
+                class="page-section content-page"
+                id="page-faq"
+                data-page="faq"
+            >
+
+                <div class="container narrow-container">
+
+                    <div class="content-header">
+                        <span class="eyebrow">HELP CENTER</span>
+                        <h1>Frequently asked questions.</h1>
+                        <p>
+                            Find answers about your Jenny's Casino account
+                            and portal.
+                        </p>
+                    </div>
+
+                    <div class="faq-list">
+
+                        <details>
+                            <summary>
+                                What is Jenny's Casino?
+                            </summary>
+
+                            <p>
+                                Jenny's Casino is the account portal used to
+                                manage your profile, loyalty information,
+                                rewards, VIP progress and available account
+                                features.
+                            </p>
+                        </details>
+
+                        <details>
+                            <summary>
+                                How do I create an account?
+                            </summary>
+
+                            <p>
+                                Select Create Account and complete the
+                                registration form with your information.
+                            </p>
+                        </details>
+
+                        <details>
+                            <summary>
+                                Can I become a promoter?
+                            </summary>
+
+                            <p>
+                                Eligible accounts can have access to promoter
+                                features. Availability and status are
+                                controlled by the platform.
+                            </p>
+                        </details>
+
+                        <details>
+                            <summary>
+                                Where can I view my rewards?
+                            </summary>
+
+                            <p>
+                                Available rewards and reward activity will be
+                                displayed inside your authenticated player
+                                dashboard.
+                            </p>
+                        </details>
+
+                        <details>
+                            <summary>
+                                How do I contact support?
+                            </summary>
+
+                            <p>
+                                Use the Support section of the portal to
+                                submit an account support request.
+                            </p>
+                        </details>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 SUPPORT
+                 ================================================= -->
+
+            <section
+                class="page-section content-page"
+                id="page-support"
+                data-page="support"
+            >
+
+                <div class="container narrow-container">
+
+                    <div class="content-header">
+                        <span class="eyebrow">SUPPORT</span>
+
+                        <h1>How can we help?</h1>
+
+                        <p>
+                            Sign in to your account to access account support
+                            features.
+                        </p>
+                    </div>
+
+                    <div class="support-card">
+
+                        <div class="support-card-icon">
+                            ?
+                        </div>
+
+                        <h2>Need account assistance?</h2>
+
+                        <p>
+                            Sign in to your Jenny's Casino account and use the
+                            support area to submit and track your request.
+                        </p>
+
+                        <button
+                            class="btn btn-primary"
+                            id="supportLoginButton"
+                            type="button"
+                        >
+                            Sign In
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TERMS
+                 ================================================= -->
+
+            <section
+                class="page-section content-page"
+                id="page-terms"
+                data-page="terms"
+            >
+
+                <div class="container narrow-container">
+
+                    <div class="content-header">
+                        <span class="eyebrow">LEGAL</span>
+                        <h1>Terms of Service</h1>
+                        <p>
+                            General terms governing use of this account
+                            portal.
+                        </p>
+                    </div>
+
+                    <div class="legal-content">
+
+                        <h2>Account access</h2>
+                        <p>
+                            You are responsible for maintaining the
+                            confidentiality of your account credentials and
+                            for activity performed through your account.
+                        </p>
+
+                        <h2>Accurate information</h2>
+                        <p>
+                            Information provided during registration should be
+                            accurate and kept current.
+                        </p>
+
+                        <h2>Platform use</h2>
+                        <p>
+                            The portal must not be used for unauthorized,
+                            fraudulent or abusive activity.
+                        </p>
+
+                        <h2>Account status</h2>
+                        <p>
+                            Account access and platform features may depend on
+                            account status and applicable platform rules.
+                        </p>
+
+                        <h2>Updates</h2>
+                        <p>
+                            These terms may be updated as the platform
+                            develops. Updated terms will be made available
+                            through the portal.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PRIVACY
+                 ================================================= -->
+
+            <section
+                class="page-section content-page"
+                id="page-privacy"
+                data-page="privacy"
+            >
+
+                <div class="container narrow-container">
+
+                    <div class="content-header">
+                        <span class="eyebrow">LEGAL</span>
+                        <h1>Privacy Policy</h1>
+                        <p>
+                            Information about how account information is
+                            handled within the portal.
+                        </p>
+                    </div>
+
+                    <div class="legal-content">
+
+                        <h2>Information collected</h2>
+                        <p>
+                            The portal may collect information necessary to
+                            create and manage your account, authenticate
+                            access and provide requested services.
+                        </p>
+
+                        <h2>Account security</h2>
+                        <p>
+                            Authentication information is processed using
+                            security controls designed to protect account
+                            access.
+                        </p>
+
+                        <h2>Platform operations</h2>
+                        <p>
+                            Account information may be used to operate
+                            features such as rewards, loyalty, referrals,
+                            support and account administration.
+                        </p>
+
+                        <h2>Your responsibility</h2>
+                        <p>
+                            Keep your login credentials private and notify
+                            support if you believe your account has been
+                            compromised.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RESPONSIBLE PLAY
+                 ================================================= -->
+
+            <section
+                class="page-section content-page"
+                id="page-responsible-play"
+                data-page="responsible-play"
+            >
+
+                <div class="container narrow-container">
+
+                    <div class="content-header">
+                        <span class="eyebrow">RESPONSIBLE PLAY</span>
+
+                        <h1>Play responsibly.</h1>
+
+                        <p>
+                            Gaming should remain entertainment and should
+                            never interfere with your wellbeing or financial
+                            responsibilities.
+                        </p>
+                    </div>
+
+                    <div class="responsible-card">
+
+                        <h2>Keep control.</h2>
+
+                        <ul>
+                            <li>Set personal limits before you play.</li>
+                            <li>Never play with money you cannot afford to lose.</li>
+                            <li>Take breaks regularly.</li>
+                            <li>Never chase losses.</li>
+                            <li>Seek help if gaming stops feeling enjoyable or controlled.</li>
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <footer class="site-footer">
+
+            <div class="container footer-inner">
+
+                <div class="footer-brand">
+                    <strong>JENNY'S CASINO</strong>
+                    <span>Premium Account Portal</span>
+                </div>
+
+                <div class="footer-links">
+
+                    <a href="#home" data-route="home">Home</a>
+                    <a href="#faq" data-route="faq">FAQ</a>
+                    <a href="#support" data-route="support">Support</a>
+                    <a href="#terms" data-route="terms">Terms</a>
+                    <a href="#privacy" data-route="privacy">Privacy</a>
+                    <a
+                        href="#responsible-play"
+                        data-route="responsible-play"
+                    >
+                        Responsible Play
+                    </a>
+
+                </div>
+
+                <div class="footer-copy">
+                    © <span id="footerYear"></span> Jenny's Casino.
+                    All rights reserved.
+                </div>
+
+            </div>
+
+        </footer>
+
+
+        <!-- =====================================================
+             GLOBAL TOAST
+             ===================================================== -->
+
+        <div
+            class="toast"
+            id="toast"
+            role="status"
+            aria-live="polite"
+            hidden
+        ></div>
+
+
+        <!-- =====================================================
+             LOADING OVERLAY
+             ===================================================== -->
+
+        <div
+            class="loading-overlay"
+            id="loadingOverlay"
+            hidden
+        >
+            <div class="loading-spinner"></div>
+            <span>Loading...</span>
+        </div>
+
+    </div>
+
+
+    <script src="./app.js" defer></script>
+
+</body>
+</html>

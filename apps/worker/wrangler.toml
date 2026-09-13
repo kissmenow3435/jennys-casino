@@ -1,0 +1,8 @@
+name = "jennys-casino-api"
+main = "src.js"
+compatibility_date = "2026-09-13"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "jennys-casino-db"
+database_id = "7ada9549-c707-44cd-98b6-a1f21130fc2b"

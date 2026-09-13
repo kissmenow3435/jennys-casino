@@ -1,0 +1,32 @@
+PRAGMA foreign_keys = OFF;
+
+DROP TABLE IF EXISTS audit_logs;
+DROP TABLE IF EXISTS security_events;
+DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS support_tickets;
+DROP TABLE IF EXISTS referral_payouts;
+DROP TABLE IF EXISTS referral_rewards;
+DROP TABLE IF EXISTS referrals;
+DROP TABLE IF EXISTS referral_clicks;
+DROP TABLE IF EXISTS referral_codes;
+DROP TABLE IF EXISTS reward_claims;
+DROP TABLE IF EXISTS rewards;
+DROP TABLE IF EXISTS vip_history;
+DROP TABLE IF EXISTS vip_progress;
+DROP TABLE IF EXISTS vip_levels;
+DROP TABLE IF EXISTS loyalty_transactions;
+DROP TABLE IF EXISTS loyalty_point_rules;
+DROP TABLE IF EXISTS loyalty_rules;
+DROP TABLE IF EXISTS loyalty_accounts;
+DROP TABLE IF EXISTS promoter_profiles;
+DROP TABLE IF EXISTS player_profiles;
+DROP TABLE IF EXISTS password_reset_tokens;
+DROP TABLE IF EXISTS email_verification_tokens;
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS user_roles;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS admin_settings;
+DROP TABLE IF EXISTS schema_migrations;
+
+PRAGMA foreign_keys = ON;
